@@ -6,4 +6,4 @@ data class PlaceResponse(val status: String, val query: String, val places: List
 
 data class Place(val id: String, val name: String, val location: Location, @SerializedName("formatted_address") val address: String)
 
-data class Location(val lat: String, val lng: String)
+data class Location(val lng: String, val lat: String)

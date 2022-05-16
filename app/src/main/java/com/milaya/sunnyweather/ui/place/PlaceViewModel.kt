@@ -19,9 +19,7 @@ class PlaceViewModel : ViewModel() {
 //    缓存页面上城市数据
     val placeList = ArrayList<Place>()
 
-//    fun savePlace(place: Place) = Repository.savePlace(place)
-//
-//    fun getSavedPlace() = Repository.getSavedPlace()
-//
-//    fun isPlaceSaved() = Repository.isPlaceSaved()
+    fun savePlace(place: Place) = Repository.savePlace(place)
+    fun getSavedPlace() = Repository.getSavedPlace()
+    fun isPlaceSaved() = Repository.isPlaceSaved()
 }
