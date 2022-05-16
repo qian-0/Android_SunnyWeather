@@ -1,5 +1,6 @@
 package com.milaya.sunnyweather.ui.weather
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -7,13 +8,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.milaya.sunnyweather.R
 import com.milaya.sunnyweather.databinding.*
+import com.milaya.sunnyweather.logic.Repository.refreshWeather
 import com.milaya.sunnyweather.logic.model.Weather
 import com.milaya.sunnyweather.tool.getSky
 import java.text.SimpleDateFormat
@@ -53,7 +58,7 @@ class WeatherActivity : AppCompatActivity() {
         if (viewModel.locationLat.isEmpty()) {
             viewModel.locationLat = intent.getStringExtra("location_lat") ?: ""
         }
-        viewModel.refreshWeather(viewModel.placeName, viewModel.dailysteps, viewModel.locationLng, viewModel.locationLat)
+        refreshWeather()
 
         viewModel.weatherLiveData.observe(this, Observer { result ->
             val weather = result.getOrNull()
@@ -63,36 +68,42 @@ class WeatherActivity : AppCompatActivity() {
                 Toast.makeText(this, "无法成功获取天气信息", Toast.LENGTH_SHORT).show()
                 result.exceptionOrNull()?.printStackTrace()
             }
-//            swipeRefresh.isRefreshing = false
+            activityWeatherBinding.swipeRefresh.isRefreshing = false
         })
 
-//        swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
-//        refreshWeather()
-//        swipeRefresh.setOnRefreshListener {
-//            refreshWeather()
-//        }
-//        navBtn.setOnClickListener {
-//            drawerLayout.openDrawer(GravityCompat.START)
-//        }
-//        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-//            override fun onDrawerStateChanged(newState: Int) {}
-//
-//            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
-//
-//            override fun onDrawerOpened(drawerView: View) {}
-//
-//            override fun onDrawerClosed(drawerView: View) {
-//                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                manager.hideSoftInputFromWindow(drawerView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-//            }
-//        })
+        activityWeatherBinding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
+        activityWeatherBinding.swipeRefresh.setOnRefreshListener {
+            refreshWeather()
+        }
+
+//        按钮点击事件：滑出侧边栏
+        activityWeatherBinding.nowInclude.navBtn.setOnClickListener {
+            activityWeatherBinding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+//        监视侧边栏状态
+        activityWeatherBinding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {}
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerOpened(drawerView: View) {}
+
+            override fun onDrawerClosed(drawerView: View) {
+//                隐藏虚拟键盘
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(drawerView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        })
     }
-
-//    fun refreshWeather() {
-//        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
-//        swipeRefresh.isRefreshing = true
-//    }
-
+//    刷新天气数据
+    fun refreshWeather() {
+        if(activityWeatherBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            activityWeatherBinding.drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        viewModel.refreshWeather(viewModel.placeName, viewModel.dailysteps, viewModel.locationLng, viewModel.locationLat)
+        activityWeatherBinding.swipeRefresh.isRefreshing = true
+    }
+//    将数据加载到布局上
     private fun showWeatherInfo(weather: Weather) {
         val time = weather.time
         val realtime = weather.realtime
