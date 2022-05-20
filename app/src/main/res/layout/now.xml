@@ -18,7 +18,8 @@
             android:layout_height="30dp"
             android:layout_marginStart="15dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_home" />
+            android:src="@drawable/ic_home" >
+        </ImageView>
 
         <!-- 城市名 -->
         <TextView
@@ -31,8 +32,8 @@
             android:singleLine="true"
             android:ellipsize="middle"
             android:textColor="#ffffff"
-            android:textSize="22sp" />
-
+            android:textSize="22sp" >
+        </TextView>
     </FrameLayout>
 
     <!-- 天气信息 -->

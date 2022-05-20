@@ -19,7 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="20sp"/>
+            android:textSize="20sp">
+        </TextView>
 
         <TextView
             android:id="@+id/placeAddress"
@@ -27,8 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="?android:attr/textColorSecondary"
-            android:textSize="14sp"/>
-
+            android:textSize="14sp">
+        </TextView>
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

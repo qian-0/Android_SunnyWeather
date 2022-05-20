@@ -71,6 +71,7 @@ class WeatherActivity : AppCompatActivity() {
             activityWeatherBinding.swipeRefresh.isRefreshing = false
         })
 
+//        下拉刷新
         activityWeatherBinding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
         activityWeatherBinding.swipeRefresh.setOnRefreshListener {
             refreshWeather()
